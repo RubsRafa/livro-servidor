@@ -1,26 +1,35 @@
 import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import cors from 'cors'
 
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
+import livrosRouter from './routes/livros.js'
 
-var app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename)
+
+const app = express();
+
+app.use(cors())
 
 // view engine setup
-app.set('views', join(__dirname, 'views'));
+app.set('views', join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(join(__dirname, 'public')));
+app.use(express.static(join(__dirname, '../public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/livros', livrosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
