@@ -1,0 +1,55 @@
+<main style="width: 70%; margin-inline: auto; margin-top: 1rem">
+  <h1>Dados do Livro</h1>
+  <form (ngSubmit)="incluir()">
+    <div class="mb-3 d-flex flex-column">
+      <label for="titulo">Título</label>
+      <input
+        id="titulo"
+        type="text"
+        class="form-control"
+        required
+        [(ngModel)]="livro.titulo"
+        name="titulo"
+      />
+    </div>
+
+    <div class="mb-3 d-flex flex-column">
+      <label for="resumo">Resumo</label>
+      <textarea
+        id="resumo"
+        class="form-control"
+        required
+        [(ngModel)]="livro.resumo"
+        name="resumo"
+      ></textarea>
+    </div>
+
+    <div class="mb-3 d-flex flex-column">
+      <label for="editora">Editora</label>
+      <select
+        id="editora"
+        class="form-select"
+        required
+        [(ngModel)]="livro.codEditora"
+        name="codEditora"
+      >
+        <option *ngFor="let editora of editoras" [value]="editora.codEditora">
+          {{ editora.nome }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3 d-flex flex-column">
+      <label for="autores">Autores (1 por linha)</label>
+      <textarea
+        id="autores"
+        class="form-control"
+        required
+        [(ngModel)]="autoresForm"
+        name="autores"
+      ></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Dados</button>
+  </form>
+</main>

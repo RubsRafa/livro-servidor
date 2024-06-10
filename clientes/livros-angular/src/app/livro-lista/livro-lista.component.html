@@ -1,0 +1,32 @@
+<!-- <div class="container mt-5"> -->
+<main style="width: 70%; margin-inline: auto; margin-top: 1rem">
+  <h1 class="text-center mb-4">Catálogo de Livros</h1>
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th style="width: '16%'">Título</th>
+        <th style="width: '50%'">Resumo</th>
+        <th style="width: '16%'">Editora</th>
+        <th style="width: '16%'">Autores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let livro of livros">
+        <td>
+          <h6>{{ livro.titulo }}</h6>
+          <button class="btn btn-danger" (click)="excluir(livro.codigo)">
+            Excluir
+          </button>
+        </td>
+        <td>{{ livro.resumo }}</td>
+        <td>{{ obterNome(livro.codEditora) }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let autor of livro.autores">{{ autor }}</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+<!-- </div> -->
