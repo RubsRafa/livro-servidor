@@ -11,7 +11,7 @@ const LinhaLivro = ({ livro, excluir, index }) => {
         <tr>
             <td>
               <h6>{livro.titulo}</h6>
-              <button class="btn btn-danger" onClick={() => excluir(livro.codigo)}>Excluir</button>
+              <button class="btn btn-danger" onClick={() => excluir(livro._id)}>Excluir</button>
 
             </td>
             <td>{livro.resumo}</td>
@@ -33,13 +33,15 @@ const LivroLista = () => {
   const controleLivro = new ControleLivro();
 
   useEffect(() => {
-    setLivros(controleLivro.obterLivros())
-    setCarregado(true)
+    controleLivro.obterLivros().then((livrosObtidos) => {
+      setLivros(livrosObtidos);
+      setCarregado(true);
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[carregado])
 
-  const excluir = (codigo) => {
-    controleLivro.excluir(codigo)
+  const excluir = async (codigo) => {
+    await controleLivro.excluir(codigo)
     setCarregado(false)
   }
 

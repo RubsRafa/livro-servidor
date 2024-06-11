@@ -21,15 +21,16 @@ const LivroDados = () => {
   const incluir = (evento) => {
     evento.preventDefault();
     const livro = {
-      codigo: 0,
+      codigo: "",
       titulo,
       resumo,
       autores: autores.split('\n'),
       codEditora: codEditora.value
     }
 
-    controleLivro.incluir(livro)
-    navigate('/')
+    controleLivro.incluir(livro).then(() => {
+      navigate('/')
+    })
   }
 
   return (
