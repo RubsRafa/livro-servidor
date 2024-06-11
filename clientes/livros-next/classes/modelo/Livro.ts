@@ -1,14 +1,14 @@
 import React from "react";
 
 export class Livro extends React.Component {
-  codigo: number;
+  codigo: string;
   codEditora: number;
   titulo: string;
   resumo: string;
   autores: string[];
 
   constructor (props: { 
-    codigo: number;
+    codigo: string;
     codEditora: number;
     titulo: string;
     resumo: string;

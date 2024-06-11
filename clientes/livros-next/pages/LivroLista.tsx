@@ -5,43 +5,29 @@ import { Livro } from '../classes/modelo/Livro';
 import Head from 'next/head';
 import { Menu } from '../componentes/Menu';
 import { LinhaLivro } from '../componentes/LinhaLivro';
-
-const baseURL = "http://localhost:3000/api/livros";
+import ControleLivro, { LivroMongo } from '../classes/controle/ControleLivros';
 
 const LivroLista: NextPage = () => {
-  const [livros, setLivros] = useState<Array<Livro>>([])
+  const [livros, setLivros] = useState<LivroMongo[]>([])
   const [carregado, setCarregado] = useState<boolean>(false);
+  const controleLivros = new ControleLivro();
 
-  const obterLivro = async () => {
-    try {
-      const response = await fetch(baseURL)
-      const data = await response.json();
-      setLivros(data.livros)
-      console.log(data)
-      setCarregado(true)
-    } catch (error) {
-      console.log('Erro ao obter livros: ', error)
-    }
-  }
+  useEffect(() => {
+    controleLivros.obterLivros().then((data) => {
+      setLivros(data);
+      setCarregado(true);
+    }).catch((error) => {
+      console.log('Erro ao obter livros: ', error);
+    });
+  }, [carregado]);
 
   const excluirLivro = async (codigo: number) => {
     try {
-      const response = await fetch(`${baseURL}/${codigo}`, {
-        method: 'DELETE'
-      })
-      if (response.ok) {
-        setCarregado(false)
-      } else {
-        console.log('Erro ao excluir livro: ', response.statusText)
-      }
+      await controleLivros.excluir(codigo)
     } catch (error) {
       console.log("Erro ao excluir livro: ", error)
     }
   }
-
-  useEffect(() => {
-    obterLivro()
-  }, [carregado])
 
   return (
     <div className={style.container}>
@@ -63,8 +49,8 @@ const LivroLista: NextPage = () => {
             </tr>
           </thead>
           <tbody>
-            {livros.map((livro) =>
-              <LinhaLivro key={livro.codigo} livro={livro} excluir={excluirLivro} />
+            {livros.map((livro, idx) =>
+              <LinhaLivro key={idx} livro={livro} excluir={excluirLivro} />
             )}
           </tbody>
         </table>

@@ -1,43 +1,62 @@
-import React from "react";
 import { Livro } from "../modelo/Livro";
 
-const livros: Array<Livro> = [
-  new Livro({ 
-    codigo: 1001, 
-    codEditora: 1, 
-    titulo: "Use a Cabeça: Java", 
-    resumo: "Use a Cabeça! Java é uma experiência completa de aprendizado em programação orientada a objetos (OO) e Java.", 
-    autores: ["Bert Bates", "Kathy Sierra"]}),
-  new Livro({ 
-    codigo: 1002, 
-    codEditora: 2, 
-    titulo: "Java, como Programar", 
-    resumo: "Milhoes de alunos e profissionais aprenderam programação e desenvolvimento de software com os livros Deitel", 
-    autores: ["Paul Deitel", "Harvey Deitel"]}),
-  new Livro({ 
-    codigo: 1003, 
-    codEditora: 3, 
-    titulo: "Core Java for the Impatient", 
-    resumo: "Readers familiar with Horstmann's original, two-volume 'Core Java' books who are looking for a comprehensive, but condensed guide to all of the new features and functions of Java SE 9 will learn how there new features impact the language and core libraries.", 
-    autores: ["Cay Horstmann"]}),
-]
+const baseURL = 'http://localhost:3030/livros'
+
+export interface LivroMongo {
+  _id: String | null;
+  codEditora: number;
+  titulo: String;
+  resumo: String;
+  autores: String[];
+}
 
 class ControleLivro {
 
-  obterLivros () {
-    return livros;
+  public async obterLivros () {
+    const response = await fetch(baseURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const livrosMongo: LivroMongo[] = await response.json();
+    
+    console.log('AAAAAAa', livrosMongo)
+    return livrosMongo
+
   }
   
-  incluir (livro: Livro) {
-    const codigos: number[] = livros.map((liv) => liv.codigo)
-    const novoCodigo = (codigos.length > 0 ? Math.max(...codigos) : 0) + 1
-    livro.codigo = novoCodigo;
-    livros.push(livro)
+  public async incluir (livro: Livro) {
+    const livroMongo: LivroMongo = {
+      _id: null,
+      codEditora: livro.codEditora,
+      titulo: livro.titulo,
+      resumo: livro.resumo,
+      autores: livro.autores
+    };
+
+    const response = await fetch(baseURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(livroMongo)
+    });ControleLivro
+
+    return response.ok;
+
   }
 
-  excluir (codigo: number) {
-    const index = livros.map((livro) => livro.codigo).indexOf(codigo)
-    livros.splice((typeof index !== 'number' ? 0 : index), 1)
+  public async excluir (codigo: number) {
+    const response = await fetch(`${baseURL}/${codigo}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return response.ok;
+
   }
 }
 
