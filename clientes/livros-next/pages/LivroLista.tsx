@@ -19,6 +19,7 @@ const LivroLista: NextPage = () => {
     }).catch((error) => {
       console.log('Erro ao obter livros: ', error);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carregado]);
 
   const excluirLivro = async (codigo: String) => {
