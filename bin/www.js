@@ -7,6 +7,7 @@
 import app from '../app.js';
 import debug from 'debug';
 import { createServer } from 'http';
+import banco from '../src/modelo/conexao.js'
 
 const debugLog = debug('livro-servidor:server');
 
@@ -31,6 +32,7 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 console.log(`Server running on port ${port}`)
+await banco;
 
 /**
  * Normalize a port into a number, string, or false.
