@@ -26,7 +26,7 @@ class ControleLivro {
 
   }
   
-  public async incluir (livro: Livro) {
+  public async incluir (livro: LivroMongo) {
     const livroMongo: LivroMongo = {
       _id: null,
       codEditora: livro.codEditora,
@@ -47,7 +47,8 @@ class ControleLivro {
 
   }
 
-  public async excluir (codigo: number) {
+  public async excluir (codigo: String) {
+    console.log(codigo)
     const response = await fetch(`${baseURL}/${codigo}`, {
       method: 'DELETE',
       headers: {

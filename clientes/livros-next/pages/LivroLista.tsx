@@ -21,9 +21,10 @@ const LivroLista: NextPage = () => {
     });
   }, [carregado]);
 
-  const excluirLivro = async (codigo: number) => {
+  const excluirLivro = async (codigo: String) => {
     try {
       await controleLivros.excluir(codigo)
+      setCarregado(!carregado);
     } catch (error) {
       console.log("Erro ao excluir livro: ", error)
     }
