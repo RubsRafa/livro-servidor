@@ -1,52 +1,51 @@
 import { Injectable } from '@angular/core';
 import { Livro } from './livro';
 
+const baseURL = 'http://localhost:3030/livros';
+export interface LivroMongo {
+  _id: String | null;
+  codEditora: number;
+  titulo: String;
+  resumo: String;
+  autores: String[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
 class ControleLivrosService {
-  livros: Array<Livro> = [
-    new Livro({
-      codigo: 1001,
-      codEditora: 1,
-      titulo: 'Use a Cabeça: Java',
-      resumo:
-        'Use a Cabeça! Java é uma experiência completa de aprendizado em programação orientada a objetos (OO) e Java.',
-      autores: ['Bert Bates', 'Kathy Sierra'],
-    }),
-    new Livro({
-      codigo: 1002,
-      codEditora: 2,
-      titulo: 'Java, como Programar',
-      resumo:
-        'Milhoes de alunos e profissionais aprenderam programação e desenvolvimento de software com os livros Deitel',
-      autores: ['Paul Deitel', 'Harvey Deitel'],
-    }),
-    new Livro({
-      codigo: 1003,
-      codEditora: 3,
-      titulo: 'Core Java for the Impatient',
-      resumo:
-        "Readers familiar with Horstmann's original, two-volume 'Core Java' books who are looking for a comprehensive, but condensed guide to all of the new features and functions of Java SE 9 will learn how there new features impact the language and core libraries.",
-      autores: ['Cay Horstmann'],
-    }),
-  ];
-
-  obterLivros() {
-    return this.livros;
+  async obterLivros(): Promise<LivroMongo[]> {
+    const response = await fetch(baseURL, {
+      method: 'GET',
+    });
+    const livrosMongo: LivroMongo[] = await response.json();
+    return livrosMongo;
   }
 
-  incluir(livro: Livro) {
-    const codigos: number[] = this.livros.map((liv) => liv.codigo);
-    const novoCodigo = (codigos.length > 0 ? Math.max(...codigos) : 0) + 1;
-    livro.codigo = novoCodigo;
-    this.livros.push(livro);
-    console.log(this.livros);
+  async incluir(livro: Livro) {
+    const livroMongo: LivroMongo = {
+      _id: null,
+      codEditora: livro.codEditora,
+      titulo: livro.titulo,
+      resumo: livro.resumo,
+      autores: livro.autores,
+    };
+
+    const response = await fetch(baseURL, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(livroMongo),
+    });
+    return response.ok;
   }
 
-  excluir(codigo: number) {
-    const index = this.livros.map((livro) => livro.codigo).indexOf(codigo);
-    this.livros.splice(typeof index !== 'number' ? 0 : index, 1);
+  async excluir(codigo: String) {
+    const response = await fetch(`${baseURL}/${codigo}`, {
+      method: 'DELETE',
+    });
+    return response.ok;
   }
 }
 

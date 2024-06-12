@@ -22,7 +22,7 @@ export class LivroDadosComponent implements OnInit {
   ) {}
 
   public livro: Livro = new Livro({
-    codigo: 0,
+    codigo: '',
     titulo: '',
     resumo: '',
     codEditora: 1,
@@ -38,7 +38,8 @@ export class LivroDadosComponent implements OnInit {
   incluir = (): void => {
     this.livro.codEditora = Number(this.livro.codEditora);
     this.livro.autores = this.autoresForm.split('\n');
-    this.servLivros.incluir(this.livro);
-    this.router.navigateByUrl('/lista');
+    this.servLivros.incluir(this.livro).then(() => {
+      this.router.navigateByUrl('/lista');
+    });
   };
 }

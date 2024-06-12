@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import ControleEditoraService from '../controle-editora.service';
-import ControleLivrosService from '../controle-livros.service';
+import ControleLivrosService, { LivroMongo } from '../controle-livros.service';
 import { Editora } from '../editora';
 import { Livro } from '../livro';
 import { CommonModule } from '@angular/common';
@@ -11,11 +11,11 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './livro-lista.component.html',
-  styleUrl: './livro-lista.component.css'
+  styleUrl: './livro-lista.component.css',
 })
 export class LivroListaComponent implements OnInit {
   public editoras: Array<Editora> = [];
-  public livros: Array<Livro> = [];
+  public livros: Array<LivroMongo> = [];
 
   constructor(
     private servEditora: ControleEditoraService,
@@ -24,12 +24,18 @@ export class LivroListaComponent implements OnInit {
 
   ngOnInit(): void {
     this.editoras = this.servEditora.getEditoras();
-    this.livros = this.servLivros.obterLivros();
+    this.servLivros.obterLivros().then((livros) => {
+      this.livros = livros;
+    })
   }
 
-  excluir = (codigo: number): void => {
-    this.servLivros.excluir(codigo);
-    this.livros = this.servLivros.obterLivros();
+  excluir = (codigo: String): void => {
+    this.servLivros.excluir(codigo)
+    .then(() => {
+      this.servLivros.obterLivros().then((livros) => {
+        this.livros = livros;
+      })
+    })
   };
 
   obterNome = (codEditora: number): string | undefined => {

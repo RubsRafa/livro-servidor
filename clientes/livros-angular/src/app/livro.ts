@@ -1,17 +1,17 @@
 export class Livro {
-  codigo: number;
+  codigo: string;
   codEditora: number;
   titulo: string;
   resumo: string;
   autores: string[];
 
   constructor(props: {
-    codigo: number,
-    codEditora: number,
-    titulo: string,
-    resumo: string,
-    autores: string[],
-  }){
+    codigo: string;
+    codEditora: number;
+    titulo: string;
+    resumo: string;
+    autores: string[];
+  }) {
     this.codigo = props.codigo;
     this.codEditora = props.codEditora;
     this.titulo = props.titulo;

@@ -14,7 +14,10 @@
       <tr *ngFor="let livro of livros">
         <td>
           <h6>{{ livro.titulo }}</h6>
-          <button class="btn btn-danger" (click)="excluir(livro.codigo)">
+          <button
+            class="btn btn-danger"
+            (click)="excluir(livro._id ?? '')"
+          >
             Excluir
           </button>
         </td>
