@@ -5,9 +5,10 @@ import ControleEditora from "../classes/controle/ControleEditora";
 import Head from "next/head";
 import { Menu } from "../componentes/Menu";
 import { useRouter } from "next/router";
+import ControleLivro from "../classes/controle/ControleLivros";
 
 const controleEditora = new ControleEditora();
-const baseURL = 'http://localhost:3000/api/livros'
+const controleLivros = new ControleLivro();
 
 const LivrosDados: NextPage = () => {
   const [titulo, setTitulo] = useState<string>('');
@@ -21,25 +22,15 @@ const LivrosDados: NextPage = () => {
     event.preventDefault();
     try {
       const livro = {
-        codigo: 0,
+        _id: '',
         titulo,
         resumo,
         autores: autores.split('\n'),
         codEditora,
       }
-      const response = await fetch(baseURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(livro)
-      })
-
-      if (response.ok) {
-        navigate.push('/LivroLista')
-      } else {
-        console.log('Erro ao incluir livro: ', response.statusText)
-      }
+      controleLivros.incluir(livro)
+        .then(() => navigate.push('/LivroLista'))
+        .catch((err) => console.log('Erro ao incluir livro:', err))
     } catch (error) {
       console.log('Erro ao incluir livro: ', error)
     }
